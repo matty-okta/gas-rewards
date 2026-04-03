@@ -10,6 +10,7 @@
     :root, .af-custom-form-container .af-form {
       --tablet-landscape: 1024px;
       --action-primary-color: #f59e0b;
+      --action-primary-color-hover: #d97706;
       --border-radius-form-elements: 6px;
       --border-radius-outer: 6px;
       --button-border-radius: 6px;
@@ -21,6 +22,21 @@
       --success-color: #f59e0b;
       --title-font-weight: 700;
       --title-font-size: 20px;
+      --widget-background-color: transparent;
+      --widget-border-color: transparent;
+      --widget-shadow: none;
+      --primary-button-background-color: #f59e0b;
+      --primary-button-text-color: #0f172a;
+      --primary-button-border-color: #f59e0b;
+      --input-border-color: #d0d5dd;
+      --input-background-color: #ffffff;
+      --input-text-color: #1a1a1a;
+      --input-placeholder-color: #94a3b8;
+      --label-color: #65758b;
+      --title-color: #1a1a1a;
+      --description-color: #65758b;
+      --link-color: #f59e0b;
+      --link-hover-color: #d97706;
     }
 
     body {
@@ -197,6 +213,110 @@
     }
     span.passkey-button-spacer {
       display: none;
+    }
+
+    /* ===== Widget card: flush / transparent ===== */
+    #widget {
+      background: transparent !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
+    .c2c633b3d,
+    [data-prompt-wrapper],
+    .prompt-container,
+    main section > div {
+      background: transparent !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
+
+    /* ===== Auth0 widget inputs: match our field design ===== */
+    input.input,
+    input[type="email"],
+    input[type="password"],
+    input[type="text"],
+    .ulp-field input {
+      width: 100% !important;
+      padding: 10px 12px !important;
+      border: 1px solid #d0d5dd !important;
+      border-radius: 6px !important;
+      font-size: 16px !important;
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      box-sizing: border-box !important;
+      background-color: #ffffff !important;
+      color: #1a1a1a !important;
+      transition: border-color 0.2s, box-shadow 0.2s !important;
+    }
+    input.input:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    input[type="text"]:focus,
+    .ulp-field input:focus {
+      outline: none !important;
+      border-color: #f59e0b !important;
+      box-shadow: 0 0 0 1px #f59e0b !important;
+    }
+    input.input::placeholder,
+    input[type="email"]::placeholder,
+    input[type="password"]::placeholder,
+    input[type="text"]::placeholder {
+      color: #94a3b8 !important;
+    }
+
+    /* ===== Labels ===== */
+    label,
+    .ulp-field-label,
+    .no-arrow label {
+      font-size: 14px !important;
+      color: #65758b !important;
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-weight: 500 !important;
+    }
+
+    /* ===== Primary buttons (Continue, Sign Up, Log In) ===== */
+    button[data-action-button-primary="true"],
+    button[type="submit"] {
+      background-color: #f59e0b !important;
+      border-color: #f59e0b !important;
+      color: #0f172a !important;
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-weight: 600 !important;
+      font-size: 16px !important;
+      border-radius: 6px !important;
+      padding: 10px 16px !important;
+      transition: background-color 0.2s !important;
+    }
+    button[data-action-button-primary="true"]:hover,
+    button[type="submit"]:hover {
+      background-color: #d97706 !important;
+      border-color: #d97706 !important;
+    }
+
+    /* ===== Secondary/social buttons ===== */
+    button[data-provider],
+    .social-button {
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      border-radius: 6px !important;
+      font-size: 14px !important;
+    }
+
+    /* ===== Titles & text ===== */
+    h1, h2, .title {
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      color: #1a1a1a !important;
+    }
+    p, .description, .text {
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    }
+
+    /* ===== Links inside widget ===== */
+    .widget a,
+    .prompt-wrapper a {
+      color: #f59e0b !important;
+    }
+    .widget a:hover,
+    .prompt-wrapper a:hover {
+      color: #d97706 !important;
     }
 
     /* Zip code field styling — matches Auth0 widget input look */
