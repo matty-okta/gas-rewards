@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="{{locale}}">
+<head>
+  {%- auth0:head -%}
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-wrapper {
+      width: 100%;
+      max-width: 440px;
+      padding: 20px;
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .brand-header h1 {
+      color: #f8fafc;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .brand-header h1 span {
+      color: #f59e0b;
+    }
+
+    .brand-header p {
+      color: #94a3b8;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .brand-footer {
+      text-align: center;
+      margin-top: 24px;
+      color: #475569;
+      font-size: 12px;
+    }
+
+    /* Zip code field injected via page template */
+    .fr-zip-field {
+      margin-top: 12px;
+    }
+    .fr-zip-field label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+      color: #65758b;
+    }
+    .fr-zip-field input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d0d5dd;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body class="_widget-auto-layout">
+  <div class="page-wrapper">
+    <div class="brand-header">
+      <h1>FUEL <span>REWARDS</span></h1>
+      <p>Earn rewards on every fill-up</p>
+    </div>
+
+    {%- auth0:widget -%}
+
+    <div class="brand-footer">
+      &copy; 2025 Fuel Rewards. All rights reserved.
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    // Only inject zip code field on signup screens
+    {% if prompt.name == "signup" or prompt.name == "signup-id" or prompt.name == "signup-password" %}
+    (function() {
+      // ext- prefixed authorization params are available through the Liquid
+      // transaction context, NOT as URL query params on the rendered page.
+      // Liquid injects the value server-side before the page is sent to the browser.
+      var zipValue = "{{ transaction.params.ext-zipcode | default: '' | escape }}";
+
+      // Wait for the widget to render, then inject the zip code field
+      function injectZipField() {
+        // Find the form inside the auth0 widget
+        var form = document.querySelector("form");
+        if (!form) return false;
+
+        // Don't inject twice
+        if (document.getElementById("ulp-zip-code")) return true;
+
+        // Find the submit button to insert before it
+        var submitBtn = form.querySelector("button[type='submit']");
+        var insertTarget = submitBtn ? submitBtn.parentElement : form;
+
+        // Create the zip code field container
+        var wrapper = document.createElement("div");
+        wrapper.className = "fr-zip-field";
+
+        var label = document.createElement("label");
+        label.setAttribute("for", "ulp-zip-code");
+        label.textContent = "Zip Code";
+
+        var input = document.createElement("input");
+        input.type = "text";
+        input.id = "ulp-zip-code";
+        input.name = "ulp-zip-code";
+        input.inputMode = "numeric";
+        input.maxLength = 5;
+        input.placeholder = "Enter your zip code";
+        input.pattern = "\\d{5}";
+        if (zipValue) input.value = zipValue;
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(input);
+
+        if (submitBtn) {
+          submitBtn.parentElement.insertBefore(wrapper, submitBtn);
+        } else {
+          form.appendChild(wrapper);
+        }
+        return true;
+      }
+
+      // Try immediately, then observe for DOM changes (widget may render async)
+      if (!injectZipField()) {
+        var observer = new MutationObserver(function(mutations) {
+          if (injectZipField()) {
+            observer.disconnect();
+          }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+    })();
+    {% endif %}
+  </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!-- Auth0 Signup Partial: form-content-end insertion point -->
+<!-- This partial adds a zip code field to the signup form. -->
+<!-- The field is pre-filled from the ext-zipcode authorization parameter. -->
+<!-- In this flow, the app navigates to /auth/login?screen_hint=signup&ext-zipcode=XXXXX -->
+<!-- Auth0 forwards ext- params to the Universal Login page where this partial reads them. -->
+
+<div class="ulp-field" style="margin-top: 12px;">
+  <label for="ulp-zip-code" class="ulp-field-label" style="display: block; margin-bottom: 4px; font-size: 14px; color: #65758b;">
+    Zip Code
+  </label>
+  <input
+    type="text"
+    id="ulp-zip-code"
+    name="ulp-zip-code"
+    inputmode="numeric"
+    pattern="\d{5}"
+    maxlength="5"
+    placeholder="Enter your zip code"
+    class="ulp-field-input"
+    style="width: 100%; padding: 10px 12px; border: 1px solid #d0d5dd; border-radius: 8px; font-size: 16px; box-sizing: border-box;"
+  />
+</div>
+
+<script>
+  // Pre-fill zip code from ext-zipcode authorization parameter
+  (function () {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var zipCode = params.get("ext-zipcode");
+      if (zipCode) {
+        var input = document.getElementById("ulp-zip-code");
+        if (input) {
+          input.value = zipCode;
+        }
+      }
+    } catch (e) {
+      // Silently fail if URL parsing is not supported
+    }
+  })();
+</script>
