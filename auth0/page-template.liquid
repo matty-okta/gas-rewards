@@ -175,7 +175,7 @@
     }
 
     /* Organization-level branding overrides */
-    {% if organization != null && organization != undefined %}
+    {% if organization != null and organization != undefined %}
       body {
         background: linear-gradient({{ organization.metadata.linear_gradient }});
       }
