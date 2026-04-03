@@ -28,13 +28,13 @@
       --primary-button-background-color: #f59e0b;
       --primary-button-text-color: #0f172a;
       --primary-button-border-color: #f59e0b;
-      --input-border-color: #d0d5dd;
-      --input-background-color: #ffffff;
-      --input-text-color: #1a1a1a;
-      --input-placeholder-color: #94a3b8;
-      --label-color: #65758b;
-      --title-color: #1a1a1a;
-      --description-color: #65758b;
+      --input-border-color: #334155;
+      --input-background-color: #1e293b;
+      --input-text-color: #f8fafc;
+      --input-placeholder-color: #64748b;
+      --label-color: #94a3b8;
+      --title-color: #f8fafc;
+      --description-color: #94a3b8;
       --link-color: #f59e0b;
       --link-hover-color: #d97706;
     }
@@ -85,6 +85,7 @@
       width: 100%;
       display: flex;
       justify-content: center;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
     }
 
     a {
@@ -128,7 +129,7 @@
       width: 100%;
       justify-content: center;
       padding: 1rem;
-      color: #1a1a1a;
+      color: #94a3b8;
       z-index: 10;
       flex-shrink: 0;
     }
@@ -238,13 +239,13 @@
     .ulp-field input {
       width: 100% !important;
       padding: 10px 12px !important;
-      border: 1px solid #d0d5dd !important;
+      border: 1px solid #334155 !important;
       border-radius: 6px !important;
       font-size: 16px !important;
       font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
       box-sizing: border-box !important;
-      background-color: #ffffff !important;
-      color: #1a1a1a !important;
+      background-color: #1e293b !important;
+      color: #f8fafc !important;
       transition: border-color 0.2s, box-shadow 0.2s !important;
     }
     input.input:focus,
@@ -260,7 +261,7 @@
     input[type="email"]::placeholder,
     input[type="password"]::placeholder,
     input[type="text"]::placeholder {
-      color: #94a3b8 !important;
+      color: #64748b !important;
     }
 
     /* ===== Labels ===== */
@@ -268,7 +269,7 @@
     .ulp-field-label,
     .no-arrow label {
       font-size: 14px !important;
-      color: #65758b !important;
+      color: #94a3b8 !important;
       font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
       font-weight: 500 !important;
     }
@@ -292,21 +293,43 @@
       border-color: #d97706 !important;
     }
 
-    /* ===== Secondary/social buttons ===== */
+    /* ===== Secondary/social buttons (Continue with Google) ===== */
     button[data-provider],
     .social-button {
       font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
       border-radius: 6px !important;
       font-size: 14px !important;
+      background-color: #ffffff !important;
+      color: #1a1a1a !important;
+      border: 1px solid #e2e8f0 !important;
+    }
+    button[data-provider]:hover,
+    .social-button:hover {
+      background-color: #f1f5f9 !important;
     }
 
-    /* ===== Titles & text ===== */
+    /* ===== Titles & text (light for dark background) ===== */
     h1, h2, .title {
       font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-      color: #1a1a1a !important;
+      color: #f8fafc !important;
     }
-    p, .description, .text {
+    p, .description, .text, span {
       font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      color: #94a3b8 !important;
+    }
+
+    /* ===== "Already have an account?" and alternate action text ===== */
+    .ulp-alternate-action,
+    .ulp-alternate-action span,
+    .ulp-alternate-action p,
+    [class*="alternate"] {
+      color: #94a3b8 !important;
+    }
+    .ulp-alternate-action a {
+      color: #f59e0b !important;
+    }
+    .ulp-alternate-action a:hover {
+      color: #d97706 !important;
     }
 
     /* ===== Links inside widget ===== */
@@ -327,17 +350,22 @@
       display: block;
       margin-bottom: 4px;
       font-size: 14px;
-      color: #65758b;
+      color: #94a3b8;
       font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     .fr-zip-field input {
       width: 100%;
       padding: 10px 12px;
-      border: 1px solid #d0d5dd;
+      border: 1px solid #334155;
       border-radius: var(--input-border-radius, 6px);
       font-size: 16px;
       box-sizing: border-box;
       font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #1e293b;
+      color: #f8fafc;
+    }
+    .fr-zip-field input::placeholder {
+      color: #64748b;
     }
     .fr-zip-field input:focus {
       outline: none;
