@@ -31,23 +31,53 @@ Run them in order when setting up a new tenant.
 
 | # | Script | Purpose |
 |---|--------|---------|
-| 1 | `01-set-page-template.sh` | Sets the branded Universal Login page template (Liquid) with zip code field injection |
-| 2 | `02-set-signup-partial.sh` | (Legacy - partials approach) Adds zip code field via partials API |
-| 3 | `03-verify-setup.sh` | Reads back the template and action bindings to confirm |
+| 1 | `01-set-page-template.sh` | Sets the branded Universal Login page template (split layout, Geist font, hero image, zip code injection) |
+| 2 | `02-set-signup-partial.sh` | (Legacy - partials approach) Adds zip code field via partials API. Not needed if using the page template approach. |
+| 3 | `03-verify-setup.sh` | Reads back the template and action bindings to confirm everything is deployed |
 | 4 | `04-create-action.sh` | Creates, deploys, and binds the Pre User Registration Action |
+
+## Page Template Layout
+
+The page template (`auth0/page-template.liquid`) uses a split-panel design:
+
+- **Desktop (≥768px wide, ≥720px tall):** Hero image fills the left half, login widget on the right. Logo in the top-left, footer at bottom-right.
+- **Mobile:** Widget only, full-width. Logo hidden on very short screens.
+
+Key features:
+- **Font:** Geist (loaded from Google Fonts) — matches the Next.js app
+- **Hero image:** `public/hero-gas-station.png` hosted on GitHub, referenced via raw.githubusercontent.com
+- **Logo:** `public/logo.svg` hosted on GitHub
+- **CSS variables:** Control border-radius, primary color (#f59e0b amber), form element sizing
+- **Organization branding:** If an Auth0 Organization has `hero_image`, `logo_url`, or `linear_gradient` in its metadata, those override the defaults
+- **Zip code field:** Injected via JavaScript on signup screens only (Liquid conditional on `prompt.name`)
 
 ## How the Zip Code Flow Works
 
-1. **App → Auth0:** The "Get Started" button links to `/auth/login?screen_hint=signup&ext-zipcode=77002`
-2. **Auth0 page template (Liquid):** The template uses `{% if prompt.name == "signup" %}` to conditionally inject JavaScript only on signup screens
-3. **JavaScript injection:** The script reads `ext-zipcode` from the URL query params (Auth0 forwards `ext-` prefixed authorization params), creates a `<input name="ulp-zip-code">` field, and injects it into the signup form using DOM manipulation. A `MutationObserver` ensures the field is added even if the widget renders asynchronously.
-4. **Pre User Registration Action:** Reads `event.request.body['ulp-zip-code']` and calls `api.user.setUserMetadata('zip_code', value)` to persist it
-5. **Post-login:** The app reads `user_metadata.zip_code` to determine loyalty tier
+1. **App → Auth0:** The "Get Started" button links to `/auth/login?screen_hint=signup&ext-zipcode=XXXXX`
+2. **Auth0 page template (Liquid):** The template uses `{% if prompt.name == "signup" %}` to conditionally run JavaScript only on signup screens
+3. **Liquid server-side injection:** The zip code value comes from `{{ transaction.params.ext-zipcode }}` — Auth0 forwards `ext-` prefixed authorization params into the Liquid `transaction` context (NOT as URL query params on the rendered page)
+4. **JavaScript DOM injection:** A `MutationObserver` waits for the Auth0 widget to render, then injects a `<input name="ulp-zip-code">` field before the submit button. The field is pre-filled with the Liquid-injected zip value.
+5. **Pre User Registration Action:** Reads `event.request.body['ulp-zip-code']` and calls `api.user.setUserMetadata('zip_code', value)` to persist it
+6. **Post-login:** The app reads `user_metadata.zip_code` to determine loyalty tier
 
 ## Architecture: Why Page Templates (not Partials)
 
 The zip code field is injected via the **page template** (`PUT /api/v2/branding/templates/universal-login`) rather than **partials** (`PUT /api/v2/prompts/{prompt}/partials`). The page template approach gives us:
 - Full control over the HTML page wrapper via Liquid syntax
-- Conditional rendering using Liquid variables like `prompt.name` and `prompt.screen.name`
-- Ability to run custom JavaScript that reads URL parameters and manipulates the widget DOM
+- Split-panel layout with hero image (not possible with partials alone)
+- Conditional rendering using Liquid variables like `prompt.name` and `transaction.params`
+- Server-side access to `ext-` authorization parameters via Liquid (more reliable than URL parsing)
+- Ability to run custom JavaScript that manipulates the widget DOM
 - The `{%- auth0:widget -%}` tag renders the standard Auth0 login/signup widget inside our custom wrapper
+- Organization-level branding overrides via metadata
+
+## Redeploying After Changes
+
+If you edit `auth0/page-template.liquid`, redeploy it with:
+
+```bash
+export AUTH0_TOKEN="your_token"
+export AUTH0_DOMAIN="pdi-rewards.cic-demo-platform.auth0app.com"
+./scripts/01-set-page-template.sh
+./scripts/03-verify-setup.sh   # confirm it took
+```

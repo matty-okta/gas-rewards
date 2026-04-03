@@ -2,54 +2,204 @@
 <html lang="{{locale}}">
 <head>
   {%- auth0:head -%}
+  <meta name="theme-color" content="#ffffff">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root, .af-custom-form-container .af-form {
+      --tablet-landscape: 1024px;
+      --action-primary-color: #f59e0b;
+      --border-radius-form-elements: 6px;
+      --border-radius-outer: 6px;
+      --button-border-radius: 6px;
+      --input-border-radius: 6px;
+      --shadow-component-outer: none;
+      --prompt-width: 100%;
+      --icon-auth0-badge: none;
+      --error-color: #FF4444;
+      --success-color: #f59e0b;
+      --title-font-weight: 700;
+      --title-font-size: 20px;
+    }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-      min-height: 100vh;
+      width: 100%;
+      height: 100%;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .logo {
+      display: none;
+      width: 100%;
+      padding: 2rem 2rem 0;
+      z-index: 10;
       justify-content: center;
     }
 
-    .page-wrapper {
+    .logo img {
+      height: 36px;
+    }
+
+    @media only screen and (min-height: 720px) {
+      .logo {
+        display: flex;
+      }
+    }
+
+    .content {
+      display: flex;
+      flex: 1 0 auto;
+      justify-content: center;
+    }
+
+    .hero-image {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-image: url('https://raw.githubusercontent.com/matty-okta/gas-rewards/main/public/hero-gas-station.png');
       width: 100%;
-      max-width: 440px;
-      padding: 20px;
+      display: none;
+      visibility: hidden;
     }
 
-    .brand-header {
+    .widget {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    a {
+      text-decoration: underline;
+      transition: color .2s;
+      font-weight: 400 !important;
+      color: #7f7f7f;
+    }
+
+    a:hover {
+      color: #1a1a1a;
+    }
+
+    button {
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .prompt-wrapper {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      justify-content: flex-start;
+      flex-direction: column;
+      max-width: 400px;
+    }
+
+    @media only screen and (min-height: 720px) {
+      .prompt-wrapper {
+        justify-content: center;
+      }
+    }
+
+    .prompt-wrapper main section>div {
+      min-height: 0 !important;
+    }
+
+    .footer {
+      display: flex;
+      position: sticky;
+      width: 100%;
+      justify-content: center;
+      padding: 1rem;
+      color: #1a1a1a;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .footer a {
+      color: #A9B3BC;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer ul {
       text-align: center;
-      margin-bottom: 32px;
     }
 
-    .brand-header h1 {
-      color: #f8fafc;
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: 1px;
+    .footer ul li {
+      display: inline-block;
+      margin: 0 4px;
     }
 
-    .brand-header h1 span {
-      color: #f59e0b;
+    .footer ul li:not(:first-of-type) {
+      margin-left: 0;
     }
 
-    .brand-header p {
-      color: #94a3b8;
-      font-size: 14px;
-      margin-top: 8px;
+    .footer ul li:not(:first-of-type)::before {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      width: 4px;
+      height: 4px;
+      margin-right: .5em;
+      background-color: #A9B3BC;
+      border-radius: 50%;
     }
 
-    .brand-footer {
-      text-align: center;
-      margin-top: 24px;
-      color: #475569;
-      font-size: 12px;
+    @media only screen and (min-width: 768px) and (min-height: 720px) {
+      .hero-image {
+        display: block;
+        visibility: visible;
+      }
+
+      .logo {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      .logo img {
+        height: 48px;
+      }
+
+      .footer {
+        position: absolute;
+        left: 50%;
+        width: 50%;
+        bottom: 0;
+      }
     }
 
-    /* Zip code field injected via page template */
+    /* Organization-level branding overrides */
+    {% if organization != null && organization != undefined %}
+      body {
+        background: linear-gradient({{ organization.metadata.linear_gradient }});
+      }
+      .hero-image {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-image: url({{ organization.metadata.hero_image }});
+        width: 100%;
+      }
+      #mini_logo {
+        content: url({{ organization.metadata.logo_url }});
+      }
+    {% endif %}
+
+    /* Hide passkey buttons */
+    button.passkey-begin-button.passkey-challenge-button {
+      display: none;
+    }
+    span.passkey-button-spacer {
+      display: none;
+    }
+
+    /* Zip code field styling — matches Auth0 widget input look */
     .fr-zip-field {
       margin-top: 12px;
     }
@@ -58,93 +208,103 @@
       margin-bottom: 4px;
       font-size: 14px;
       color: #65758b;
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     .fr-zip-field input {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid #d0d5dd;
-      border-radius: 8px;
+      border-radius: var(--input-border-radius, 6px);
       font-size: 16px;
       box-sizing: border-box;
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .fr-zip-field input:focus {
+      outline: none;
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 1px #f59e0b;
     }
   </style>
+  <title>{{ prompt.screen.texts.pageTitle }}</title>
 </head>
-<body class="_widget-auto-layout">
-  <div class="page-wrapper">
-    <div class="brand-header">
-      <h1>FUEL <span>REWARDS</span></h1>
-      <p>Earn rewards on every fill-up</p>
-    </div>
-
-    {%- auth0:widget -%}
-
-    <div class="brand-footer">
-      &copy; 2025 Fuel Rewards. All rights reserved.
+<body class="_hide-prompt-logo">
+  <div class="logo">
+    <a href="/">
+      <img title="Fuel Rewards" alt="Fuel Rewards logo" id="mini_logo" class="mini_logo"
+        src="https://raw.githubusercontent.com/matty-okta/gas-rewards/main/public/logo.svg" />
+    </a>
+  </div>
+  <div class="content">
+    <div class="hero-image"></div>
+    <div class="widget">
+      <div class="prompt-wrapper _hide-prompt-logo">
+        {%- auth0:widget -%}
+      </div>
     </div>
   </div>
-
-  <script type="text/javascript">
-    // Only inject zip code field on signup screens
-    {% if prompt.name == "signup" or prompt.name == "signup-id" or prompt.name == "signup-password" %}
-    (function() {
-      // ext- prefixed authorization params are available through the Liquid
-      // transaction context, NOT as URL query params on the rendered page.
-      // Liquid injects the value server-side before the page is sent to the browser.
-      var zipValue = "{{ transaction.params.ext-zipcode | default: '' | escape }}";
-
-      // Wait for the widget to render, then inject the zip code field
-      function injectZipField() {
-        // Find the form inside the auth0 widget
-        var form = document.querySelector("form");
-        if (!form) return false;
-
-        // Don't inject twice
-        if (document.getElementById("ulp-zip-code")) return true;
-
-        // Find the submit button to insert before it
-        var submitBtn = form.querySelector("button[type='submit']");
-        var insertTarget = submitBtn ? submitBtn.parentElement : form;
-
-        // Create the zip code field container
-        var wrapper = document.createElement("div");
-        wrapper.className = "fr-zip-field";
-
-        var label = document.createElement("label");
-        label.setAttribute("for", "ulp-zip-code");
-        label.textContent = "Zip Code";
-
-        var input = document.createElement("input");
-        input.type = "text";
-        input.id = "ulp-zip-code";
-        input.name = "ulp-zip-code";
-        input.inputMode = "numeric";
-        input.maxLength = 5;
-        input.placeholder = "Enter your zip code";
-        input.pattern = "\\d{5}";
-        if (zipValue) input.value = zipValue;
-
-        wrapper.appendChild(label);
-        wrapper.appendChild(input);
-
-        if (submitBtn) {
-          submitBtn.parentElement.insertBefore(wrapper, submitBtn);
-        } else {
-          form.appendChild(wrapper);
-        }
-        return true;
-      }
-
-      // Try immediately, then observe for DOM changes (widget may render async)
-      if (!injectZipField()) {
-        var observer = new MutationObserver(function(mutations) {
-          if (injectZipField()) {
-            observer.disconnect();
-          }
-        });
-        observer.observe(document.body, { childList: true, subtree: true });
-      }
-    })();
-    {% endif %}
-  </script>
+  <footer class="footer">
+    <ul>
+      <li><a href="#">Terms &amp; Conditions</a></li>
+      <li><a href="#">Privacy</a></li>
+    </ul>
+  </footer>
 </body>
+
+<script type="text/javascript">
+  // Inject zip code field on signup screens
+  {% if prompt.name == "signup" or prompt.name == "signup-id" or prompt.name == "signup-password" %}
+  (function() {
+    var zipValue = "{{ transaction.params.ext-zipcode | default: '' | escape }}";
+
+    function injectZipField() {
+      var form = document.querySelector("form");
+      if (!form) return false;
+
+      // Don't inject twice
+      if (document.getElementById("ulp-zip-code")) return true;
+
+      // Find the submit button to insert before it
+      var submitBtn = form.querySelector("button[type='submit']");
+      var insertTarget = submitBtn ? submitBtn.parentElement : form;
+
+      var wrapper = document.createElement("div");
+      wrapper.className = "fr-zip-field";
+
+      var label = document.createElement("label");
+      label.setAttribute("for", "ulp-zip-code");
+      label.textContent = "Zip Code";
+
+      var input = document.createElement("input");
+      input.type = "text";
+      input.id = "ulp-zip-code";
+      input.name = "ulp-zip-code";
+      input.inputMode = "numeric";
+      input.maxLength = 5;
+      input.placeholder = "Enter your zip code";
+      input.pattern = "\\d{5}";
+      if (zipValue) input.value = zipValue;
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(input);
+
+      if (submitBtn) {
+        submitBtn.parentElement.insertBefore(wrapper, submitBtn);
+      } else {
+        form.appendChild(wrapper);
+      }
+      return true;
+    }
+
+    if (!injectZipField()) {
+      var observer = new MutationObserver(function(mutations) {
+        if (injectZipField()) {
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+  })();
+  {% endif %}
+</script>
+
 </html>

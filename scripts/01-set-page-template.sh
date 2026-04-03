@@ -7,12 +7,18 @@
 # including custom branding, fonts, and JavaScript.
 #
 # The template includes:
-# - Fuel Rewards branded header (dark gradient, amber accent)
-# - Liquid conditional: on signup screens, injects a zip code field
-# - JavaScript reads ext-zipcode from the URL (forwarded by Auth0 from the
-#   authorization request) and pre-fills the zip code input
+# - Split layout: hero image (gas station) on left, login widget on right (desktop)
+# - Mobile-responsive: collapses to widget-only on small screens
+# - Geist font (matches the Next.js app)
+# - CSS variables for consistent form element styling (border-radius, colors)
+# - Logo pulled from the public GitHub repo
+# - Organization-aware branding overrides (hero image, logo, gradient)
+# - Liquid conditional: on signup screens, injects a zip code field via JS
+# - JavaScript reads ext-zipcode from transaction.params (Liquid server-side)
+#   and pre-fills the zip code input
 # - The field uses name="ulp-zip-code" so the Pre User Registration Action
 #   can read it from event.request.body
+# - Footer with Terms & Privacy links
 #
 # API:  PUT /api/v2/branding/templates/universal-login
 # Docs: https://auth0.com/docs/customize/login-pages/universal-login/customize-templates

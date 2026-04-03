@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="{{locale}}">
+
+<head>
+  {%- auth0:head -%}
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="https://use.typekit.net/zjs2kuv.css">
+  <style>
+
+      {% if transaction.params.ext-alt-brand == "portal_1" %}
+        body {
+            background-image: url("https://images.unsplash.com/photo-1522383225653-ed111181a951?q=80&w=2952&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        #custom-prompt-logo {
+            background-image: url('https://cdn.worldvectorlogo.com/logos/insite-vision.svg');
+        }
+        .prompt-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 480px;
+            height: 100%;
+            justify-content: center;
+            background-color: rgb(250, 232, 241);
+        }
+         /* Hide the button with the specified classes */
+        button.passkey-begin-button.passkey-challenge-button {
+            display: none;
+        }
+
+        /* Hide the span with the specified class */
+        span.passkey-button-spacer {
+            display: none;
+        }
+      {% else %}
+:root, .af-custom-form-container .af-form {
+      --tablet-landscape: 1024px;
+      --action-primary-color: black;
+      --border-radius-form-elements: 6px;
+      --border-radius-outer: 6px;
+      --button-border-radius: 6px;
+      --input-border-radius: 6px;
+      --shadow-component-outer: none;
+      --prompt-width: 100%;
+      --icon-auth0-badge: none;
+      --error-color: #FF4444;
+      --success-color: black;
+      --title-font-weight: 700;
+      --title-font-size: 20px;
+    }
+
+    body {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      font-family: sofia-pro, sans-serif;
+    }
+
+    .logo {
+      display: none;
+      width: 100%;
+      padding: 2rem 2rem 0;
+      z-index: 10;
+      justify-content: center;
+    }
+
+    .logo img {
+      height: 36px;
+    }
+
+    @media only screen and (min-height: 720px) {
+      .logo {
+        display: flex;
+      }
+    }
+
+    .content {
+      display: flex;
+      flex: 1 0 auto;
+      justify-content: center;
+    }
+
+    .hero-image {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-image: url('https://images.unsplash.com/photo-1624466548064-b98215a03cf3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2785&q=80');
+      width: 100%;
+      display: none;
+      visibility: hidden;
+    }
+
+    .widget {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    a {
+      text-decoration: underline;
+      transition: color .2s;
+      font-weight: 400 !important;
+      color: #7f7f7f;
+    }
+
+    a:hover {
+      color: #1a1a1a;
+    }
+
+    button {
+      font-family: sofia-pro, sans-serif;
+    }
+
+
+    .prompt-wrapper {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      justify-content: flex-start;
+      flex-direction: column;
+      max-width: 400px;
+    }
+
+    
+
+    @media only screen and (min-height: 720px) {
+      .prompt-wrapper {
+        justify-content: center;
+      }
+    }
+
+    .prompt-wrapper main section>div {
+      min-height: 0 !important;
+    }
+
+    .footer {
+      display: flex;
+      position: sticky;
+      width: 100%;
+      justify-content: center;
+      padding: 1rem;
+      width: 100%;
+      color: #1a1a1a;
+      /* Use a high z-index for future-proofing */
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .footer a {
+      color: #A9B3BC;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer ul {
+      text-align: center;
+    }
+
+    .footer ul li {
+      display: inline-block;
+      margin: 0 4px;
+    }
+
+    .footer ul li:not(:first-of-type) {
+      margin-left: 0;
+    }
+
+    .footer ul li:not(:first-of-type)::before {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      width: 4px;
+      height: 4px;
+      margin-right: .5em;
+      background-color: #A9B3BC;
+      border-radius: 50%;
+    }
+
+    @media only screen and (min-width: 768px) and (min-height: 720px) {
+      .hero-image {
+        display: block;
+        visibility: visible;
+      }
+
+      .logo {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      .logo img {
+        height: 48px;
+      }
+
+      .footer {
+        position: absolute;
+        left: 50%;
+        width: 50%;
+        bottom: 0;
+      }
+  
+      {% endif %}
+      {% if organization != null && organization != undefined %}
+        body {
+            background: linear-gradient({{ organization.metadata.linear_gradient }})
+        }
+        .hero-image {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-image: url({{organization.metadata.hero_image}});
+            width: 100%;
+        }
+        #mini_logo {
+            content:url({{organization.metadata.logo_url}});
+        }
+       
+      {% endif %}
+    }
+
+    {% if transaction.params.ext-alt-brand == "passkey_only" %}
+        /* Hide the form with data-form-primary attribute set to true */
+        form[data-form-primary="true"] {
+            display: none;
+        }
+
+        /* Hide the form with data-provider attribute set to google */
+        form[data-provider="google"] {
+            display: none;
+        }
+
+        /* Hide the div with the class ulp-alternate-action */
+        div.ulp-alternate-action {
+            display: none;
+        }
+
+        /* Hide the div with the specified class names */
+        div.c2c633b3d.c457a2484 {
+            display: none;
+        }
+    {% else %}
+        /* Hide the button with the specified classes */
+        button.passkey-begin-button.passkey-challenge-button {
+            display: none;
+        }
+
+        /* Hide the span with the specified class */
+        span.passkey-button-spacer {
+            display: none;
+        }
+    {% endif %}
+
+    /* Hide btn_sso_es if ui_locales is 'es' */
+    {% if locale == 'es' %}
+        #btn_sso_es {
+            display: none;
+        }
+    {% endif %}
+
+    /* Hide btn_sso_en if ui_locales is 'en' or undefined */
+    {% if locale == 'en' or ui_locales == '' %}
+        #btn_sso_en {
+            display: none;
+        }
+    {% endif %}
+  </style>
+  <title>{{ prompt.screen.texts.pageTitle }}</title>
+</head>
+
+{% if transaction.params.ext-alt-brand == "portal_1" %}
+    <body class="_widget-auto-layout _use-custom-prompt-logo">
+        <div class="prompt-wrapper">
+            {%- auth0:widget -%}
+        </div>
+    </body>
+    <footer class="footer">
+        <ul>
+        <li><a href="https://demo0.samyap.dev/terms-of-service">Terms &amp; Conditions</a></li>
+        <li><a href="https://demo0.samyap.dev/privacy-policy">Privacy</a></li>
+        </ul>
+    </footer>
+{% else %}
+    <body class="_hide-prompt-logo">
+        <div class="logo">
+            <a href="/">
+                <img title="auth0" alt="auth0 logo" id="mini_logo" class="mini_logo"
+                    src="https://companieslogo.com/img/orig/OKTA-8b49bf18.png?t=1669879493" />
+                </svg>
+            </a>
+        </div>
+        <div class="content">
+            <div class="hero-image"></div>
+            <div class="widget">
+            <div class="prompt-wrapper _hide-prompt-logo">
+                {%- auth0:widget -%}
+            </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <ul>
+            <li><a href="https://demo0.samyap.dev/terms-of-service">Terms &amp; Conditions</a></li>
+            <li><a href="https://demo0.samyap.dev/privacy-policy">Privacy</a></li>
+            <li id="btn_sso_en"><a href="https://demo0.samyap.dev/sso?locale=en">English</a></li>
+            <li id="btn_sso_es"><a href="https://demo0.samyap.dev/sso?locale=es">Spanish</a></li>
+            </ul>
+        </footer>
+    </body>
+{% endif %}
+<script>
+    var existingButtons = document.querySelectorAll('[data-action-button-primary=true]');
+    if (existingButtons.length > 0) {
+        var exitingButtonClassName = existingButtons[0].className;
+    }
+    var switchConnectionButton = document.getElementById("switchConnectionButton");
+    switchConnectionButton.className = exitingButtonClassName;
+    const elem = document.getElementById("placeholder");
+    if (elem){ 
+        elem.value = (new URLSearchParams(document.location.search)).get("state");
+    }
+</script>
+
+</html>

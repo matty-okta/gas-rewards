@@ -34,12 +34,15 @@ try:
     print(f'Template length: {len(body)} chars')
     print(f'Has auth0:head: {\"auth0:head\" in body}')
     print(f'Has auth0:widget: {\"auth0:widget\" in body}')
-    print(f'Has FUEL REWARDS branding: {\"FUEL\" in body and \"REWARDS\" in body}')
+    print(f'Has split layout (hero-image): {\"hero-image\" in body}')
+    print(f'Has Geist font: {\"Geist\" in body}')
+    print(f'Has logo from GitHub: {\"matty-okta/gas-rewards\" in body}')
     print(f'Has zip code injection: {\"ulp-zip-code\" in body}')
     print(f'Has Liquid prompt conditional: {\"prompt.name\" in body}')
+    print(f'Has org branding overrides: {\"organization.metadata\" in body}')
     print()
-    print('--- First 200 chars ---')
-    print(body[:200])
+    print('--- First 300 chars ---')
+    print(body[:300])
 except:
     print(sys.stdin.read())
 "
